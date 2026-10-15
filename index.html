@@ -1,0 +1,312 @@
+!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفحة الشخصية | المبرمجة فاطمة محمد باقر</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-primary: #f3e8ff;
+            --bg-card: #ffffff;
+            --text-primary: #3b0764;
+            --text-secondary: #6b21a8;
+            --accent-primary: #9333ea;
+            --accent-secondary: #c084fc;
+            --accent-gradient: linear-gradient(135deg, #7e22ce 0%, #a855f7 50%, #ec4899 100%);
+            --border-color: #e9d5ff;
+            --shadow-sm: 0 4px 15px -3px rgba(147, 51, 234, 0.1);
+            --shadow-lg: 0 15px 35px -5px rgba(147, 51, 234, 0.25);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f051d;
+            --bg-card: #180929;
+            --text-primary: #f3e8ff;
+            --text-secondary: #d8b4fe;
+            --border-color: #3b0764;
+            --shadow-lg: 0 15px 35px -5px rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* Controls */
+        .top-controls {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .btn-control {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-control:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: var(--accent-primary);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Header / Card */
+        .profile-header {
+            background: var(--bg-card);
+            border-radius: 30px;
+            padding: 45px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: var(--accent-gradient);
+        }
+
+        .avatar-container {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            padding: 5px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .avatar-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--bg-card);
+        }
+
+        .profile-role {
+            display: inline-block;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 5px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .profile-title {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card-section {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .card-section.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-primary);
+        }
+
+        .section-content {
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        ul.details-list {
+            list-style: none;
+        }
+
+        ul.details-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+
+        ul.details-list li:last-child {
+            border-bottom: none;
+        }
+
+        ul.details-list span {
+            color: var(--text-primary);
+            font-weight: 700;
+        }
+
+        /* Footer */
+        .profile-footer {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 30px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body data-theme="light">
+
+    <div class="container">
+        <!-- Top Controls -->
+        <div class="top-controls">
+            <button class="btn-control" id="confettiBtn">
+                🎉 احتفال
+            </button>
+            <button class="btn-control" id="themeToggle">
+                🌙 الوضع الليلي
+            </button>
+        </div>
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="avatar-container">
+                <!-- صورة افتراضية، يمكنك استبدال الرابط بصورتك الشخصية -->
+                <img src="https://via.placeholder.com/130" alt="المبرمجة فاطمة محمد باقر">
+            </div>
+            <div class="profile-role">المبرمجة المجتهدة 💻✨</div>
+            <h1 class="profile-name">فاطمة محمد باقر</h1>
+            <p class="profile-title">طالبة طموحة وشغوفة بعلوم الذكاء الاصطناعي وبرمجة المستقبل</p>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <!-- Personal Info Card -->
+            <div class="card-section">
+                <h2 class="section-title">📋 البطاقة الشخصية</h2>
+                <ul class="details-list">
+                    <li>العمر: <span>13 سنة</span></li>
+                    <li>الصف الدراسي: <span>ثاني متوسط</span></li>
+                    <li>المدرسة: <span>ثانوية الحكيم</span></li>
+                </ul>
+            </div>
+
+            <!-- Training & Academy Card -->
+            <div class="card-section">
+                <h2 class="section-title">🚀 المسار التقني</h2>
+                <ul class="details-list">
+                    <li>مركز التدريب: <span style="color: #a855f7;">Rook For AI</span></li>
+                    <li>التخصص: <span>الذكاء الاصطناعي والبرمجة</span></li>
+                    <li>الصفة: <span>طالبة مجتهدة ومبدعة</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="card-section full-width">
+            <h2 class="section-title">✨ نبذة تعريفية</h2>
+            <p class="section-content">
+                أهلاً بك في صفحتي الشخصية! أنا المبرمجة <strong>فاطمة محمد باقر</strong>، أدرس في ثانوية الحكيم (الصف الثاني المتوسط). أسعى دائماً لتطوير مهاراتي في عالم البرمجة والتقنية من خلال انضمامي ومثابرتي في مركز <strong>Rook For AI</strong> للذكاء الاصطناعي والبرمجة، وأطمح لأن أترك بصمة مميزة في مستقبل التكنولوجيا.
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="profile-footer">
+            تصميم وتطوير المبرمجة فاطمة محمد باقر &copy; 2026
+        </div>
+    </div>
+
+    <!-- JavaScript Scripts -->
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            if (currentTheme === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.innerHTML = '☀️ الوضع النهاري';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.innerHTML = '🌙 الوضع الليلي';
+            }
+        });
+
+        // Confetti Effect Functionality
+        const confettiBtn = document.getElementById('confettiBtn');
+        confettiBtn.addEventListener('click', () => {
+            confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.6 },
+                colors: ['#9333ea', '#c084fc', '#ec4899', '#3b82f6']
+            });
+        });
+    </script>
+</body>
+</html>
